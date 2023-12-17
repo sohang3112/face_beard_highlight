@@ -4,6 +4,15 @@ by highlighting beard problem areas that need to be trimmed.
 
 **NOTE:** See how the algorithm works in [this Jupyter Notebook](prototype.ipynb).
 
+## Install & Run
+Ensure Python 3 is installed, and then run:
+```console
+$ git clone https://github.com/sohang3112/face_beard_highlight.git
+$ cd face_beard_highlight
+$ pip install -r requirements.txt
+$ python main.py
+```
+
 ## Bugs
 - 25th percentile of grayscale frame is steadily increasing in each frame,
 so after a point, it increases so much that hear & beard stop being highlighted completely.
