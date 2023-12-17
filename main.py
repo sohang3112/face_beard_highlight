@@ -1,5 +1,6 @@
 """Capture webcam and highlight beard areas needing shaving in realtime"""
 from typing import Any
+from argparse import ArgumentParser
 import os
 import sys
 
@@ -52,10 +53,21 @@ def color_face_beard(original_image: Cv2Image) -> Cv2Image:
     return blended_image
 
 
-webcam_device_id = int(os.environ.get('WEBCAM_DEVICE_ID', '0'))
-cap = cv2.VideoCapture(webcam_device_id)
+parser = ArgumentParser()
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--video-url', type=str, help='The url of the video to process')
+group.add_argument('--webcam', type=int, default=0, help='Device ID of webcam')
+args = parser.parse_args()
+
+if args.video_url is not None:
+    name = f'video {args.video_url}'
+    cap = cv2.VideoCapture(args.video_url)
+else:
+    name = f'webcam (device id {args.webcam})'
+    cap = cv2.VideoCapture(args.webcam)
+
 if not cap.isOpened():
-    print(f'Failed to capture webcam at device id {webcam_device_id}. Exiting.')
+    print(f'Failed to capture {name}. Exiting.')
     sys.exit(1)
 
 frame_delay = 1    # seconds
