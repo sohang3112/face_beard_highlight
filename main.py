@@ -1,11 +1,18 @@
 """Capture webcam and highlight beard areas needing shaving in realtime"""
+from typing import Any
+import os
+import sys
 
 import cv2
 import numpy as np
 import numpy.typing as npt
 import face_recognition as fc
 
-Cv2Image = npt.NDArray[np.int_]
+try:
+    Cv2Image = npt.NDArray[np.int_]
+except AttributeError:
+    Cv2Image = Any
+
 BLUE, GREEN, RED = 0, 1, 2            # cv2 stores colors as BGR
 
 def extract_faces(original_image: Cv2Image) -> Cv2Image:
@@ -44,9 +51,14 @@ def color_face_beard(original_image: Cv2Image) -> Cv2Image:
 
     return blended_image
 
-frame_delay = 1    # seconds
-cap = cv2.VideoCapture(0)          # capture webcam video
 
+webcam_device_id = int(os.environ.get('WEBCAM_DEVICE_ID', '0'))
+cap = cv2.VideoCapture(webcam_device_id)
+if not cap.isOpened():
+    print(f'Failed to capture webcam at device id {webcam_device_id}. Exiting.')
+    sys.exit(1)
+
+frame_delay = 1    # seconds
 while True:
     ret, frame = cap.read()
     transformed_frame = color_face_beard(frame)
