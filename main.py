@@ -3,12 +3,25 @@
 import cv2
 import numpy as np
 import numpy.typing as npt
+import face_recognition as fc
 
 Cv2Image = npt.NDArray[np.int_]
 BLUE, GREEN, RED = 0, 1, 2            # cv2 stores colors as BGR
 
+def extract_face(original_image: Cv2Image) -> Cv2Image:
+    rgb_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+    face_locations = fc.face_locations(rgb_image)
+    if not face_locations:             # no face detected
+        return original_image.copy()
+
+    top, right, bottom, left = face_locations[0]
+    face_image = 255 * np.ones_like(original_image)
+    face_image[top:bottom, left:right] = original_image[top:bottom, left:right]
+    return face_image
+
 def color_face_beard(original_image: Cv2Image) -> Cv2Image:
-    gray_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)
+    face_image = extract_face(original_image)
+    gray_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2GRAY)
 
     im = gray_image.copy()
     print('25th percentile:', np.percentile(gray_image, 25))
