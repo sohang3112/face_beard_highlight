@@ -52,10 +52,10 @@ def color_face_beard(original_image: Cv2Image) -> Cv2Image:
 
     return blended_image
 
-
 parser = ArgumentParser()
 group = parser.add_mutually_exclusive_group()
-group.add_argument('--video-url', type=str, help='The url of the video to process')
+parser.add_argument('--output', default='realtime', help='Path of output video')
+group.add_argument('--video-url', help='The url of the video to process')
 group.add_argument('--webcam', type=int, default=0, help='Device ID of webcam')
 args = parser.parse_args()
 
@@ -71,14 +71,34 @@ if not cap.isOpened():
     sys.exit(1)
 
 frame_delay = 1    # seconds
-while True:
-    ret, frame = cap.read()
-    transformed_frame = color_face_beard(frame)
-    cv2.imshow('frame', transformed_frame)
 
-    # Stop when close button of window is pressed
-    if cv2.waitKey(frame_delay) and cv2.getWindowProperty('frame', cv2.WND_PROP_VISIBLE) < 1:
-        break
+if args.output == 'realtime':
+    print('Starting realtime processing of', name)
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        transformed_frame = color_face_beard(frame)
+        cv2.imshow('frame', transformed_frame)
+
+        # Stop when close button of window is pressed
+        if cv2.waitKey(frame_delay) and cv2.getWindowProperty('frame', cv2.WND_PROP_VISIBLE) < 1:
+            break
+else:
+    print('Saving output video at', args.output)
+    fps = 1 / frame_delay
+    fourcc = cv2.VideoWriter_fourcc('X','V','I','D')
+    out = cv2.VideoWriter(args.output, fourcc, 20.0, (640, 480))
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            transformed_frame = color_face_beard(frame)
+            out.write(transformed_frame)
+    finally:
+        out.release()       # Save & close output video file
+        print('Output saved at', args.output)
 
 cap.release()
 cv2.destroyAllWindows()
