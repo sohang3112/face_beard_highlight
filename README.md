@@ -2,6 +2,8 @@
 This project aims to help during beard trimming 
 by highlighting beard problem areas that need to be trimmed.
 
+**NOTE:** See how the algorithm works in [this Jupyter Notebook](prototype.ipynb).
+
 ## Bugs
 - 25th percentile of grayscale frame is steadily increasing in each frame,
 so after a point, it increases so much that hear & beard stop being highlighted completely.
