@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import numpy.typing as npt
 
-Cv2Image = npt.NDArray
+Cv2Image = npt.NDArray[np.int_]
 BLUE, GREEN, RED = 0, 1, 2            # cv2 stores colors as BGR
 
 def color_face_beard(original_image: Cv2Image) -> Cv2Image:
@@ -35,6 +35,7 @@ def color_face_beard(original_image: Cv2Image) -> Cv2Image:
 
 frame_delay = 1    # seconds
 cap = cv2.VideoCapture(0)          # capture webcam video
+
 while True:
     ret, frame = cap.read()
     transformed_frame = color_face_beard(frame)
