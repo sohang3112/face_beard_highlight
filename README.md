@@ -4,6 +4,7 @@ by highlighting beard problem areas that need to be trimmed.
 
 **NOTE:** See how the algorithm works in [this Jupyter Notebook](prototype.ipynb).
 
+
 ## Install & Run
 
 ### Installation
@@ -16,6 +17,17 @@ $ pip install -r requirements.txt   # NOTE: this can take 10-15 mins because of 
 
 ### Running
 Now start the program with command `python main.py`.
+
+
+## Tested on:
+- Windows 11 - Webcam, Video url
+- Fedora 38 (Linux) - Video url
+- Docker - Video url
+
+
+## TODO
+- Test webcam on docker
+
 
 ## Bugs
 - When `video-url` and output video path are both given, and during execution *Ctrl+C* is pressed to
@@ -40,6 +52,7 @@ For example, in this image (medium lighting),
 some beard areas are highlighted while majority is not highlighted:
 
 ![Medium Dark Lighting](test_outputs/medium_lighting.png)
+
 
 ## Useful Tools & Resources
 - Pick exact RGB color from any image pixel: https://www.imgcolorpicker.com/
